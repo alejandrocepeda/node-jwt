@@ -1,11 +1,29 @@
 const route = require('express').Router()
+const User = require('../models/User')
 
-route.post('/register',(req,res)=>{
-    res.send(`auth register route ${req.body.username}`)
+route.post('/register', async (req, res) => {
+  
+  //res.send('register')
+  //console.log('register')
+  
+  const user = new User({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password
+  })
+  
+  try{
+    const userSave = await user.save()
+    res.send(userSave)  
+  }
+  catch(err){
+    res.status(400).send(err)  
+  }
+  
 })
 
-route.post('/login',(req,res) => {
-    res.send('auth login route')
+route.get('/login', (req, res) => {
+  res.send('auth login route')
 })
 
 module.exports = route
